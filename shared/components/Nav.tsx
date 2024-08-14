@@ -4,11 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo from '@public/static/images/logo.svg'
 import { useEffect, useState } from 'react'
-import { getProviders, signOut, signIn } from 'next-auth/react';
+import { getProviders, signOut, signIn, useSession } from 'next-auth/react';
 
 const Nav = () => {
 
-  const isuserLoggedIn = true;
+  const { data: session } = useSession();
 
   const [providers, setProviders]: any = useState(null);
 
@@ -46,7 +46,7 @@ const Nav = () => {
       {/* Desktop Navigation */}
       <div className="sm:flex hidden">
 
-        {isuserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
 
             <Link href="/create-prompt" className="black_btn">
@@ -70,7 +70,7 @@ const Nav = () => {
               Object.values(providers).map( 
                 (provider: any) => (
                   <button type='button' key={provider.name} className="black_btn"
-                  onClick={() => signIn(provider.id)}>
+                  onClick={() => signIn("google")}>
                     Sign In
                   </button>
                 )
@@ -84,7 +84,7 @@ const Nav = () => {
       {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
         
-        {isuserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
 
             <Image src={logo} alt='foto de perfil' className="rounded-full"
@@ -125,7 +125,7 @@ const Nav = () => {
                 (provider: any) => (
 
                   <button type='button' key={provider.name} className="black_btn"
-                  onClick={() => signIn(provider.id)}>
+                  onClick={() => signIn()}>
                     Sign In
                   </button>
 
